@@ -2,4 +2,4 @@
 
 ## swamp
 
-Swamp Helper to setup aliases from a config.
+[Swamp Helper](https://github.com/Odania-IT/tools/tree/master/swamp) to setup aliases from a config.
