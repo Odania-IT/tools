@@ -57,7 +57,7 @@ unless 'y'.eql? input
 end
 
 puts 'Copying file'
-FileUtils.mkdir_p File.base_dir(bash_aliases_file)
+FileUtils.mkdir_p File.dirname(bash_aliases_file)
 FileUtils.cp tmp_aliases_file, bash_aliases_file
 
 puts
