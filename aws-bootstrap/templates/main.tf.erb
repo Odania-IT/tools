@@ -1,0 +1,19 @@
+provider "aws" {
+  region = "${var.region}"
+  profile = "<%= variables['main_profile'] %>"
+}
+
+<%- accounts.each_pair do |key, data| -%>
+provider "aws" {
+  region = "${var.region}"
+  profile = "<%= data['profile_name'] %>"
+  alias = "<%= key %>"
+}
+
+data "aws_caller_identity" "<%= key %>" {
+  provider = "aws.<%= key %>"
+}
+
+<%- end -%>
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}

@@ -1,0 +1,28 @@
+<%- managed_policies.each_pair do |policy_name, data| -%>
+data "aws_iam_policy_document" "policy-<%= policy_name %>" {
+  <%- data['statements'].each do |statement_data| -%>
+  statement {
+    effect = "<%= statement_data['effect'] %>"
+
+    actions = [
+      "<%= statement_data['actions'].join("\",\n\"") %>"
+    ]
+
+    resources = [
+      "<%= statement_data['resources'].join("\",\n\"") %>"
+    ]
+  }
+  <%- end if data['statements'] -%>
+
+}
+
+<%- accounts.each_pair do |account_name, _data| -%>
+resource "aws_iam_policy" "<%= account_name %>-<%= policy_name %>" {
+  name = "<%= policy_name %>"
+  policy = "${data.aws_iam_policy_document.policy-<%= policy_name %>.json}"
+  provider = "aws.<%= account_name %>"
+}
+
+<%- end -%>
+
+<%- end -%>

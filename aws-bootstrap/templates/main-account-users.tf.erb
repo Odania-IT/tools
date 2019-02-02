@@ -1,0 +1,21 @@
+<%- users.each_pair do |user_name, data| -%>
+resource "aws_iam_user" "<%= user_name %>" {
+  name = "<%= user_name %>"
+
+  tags {
+    company-user = "<%= user_name %>"
+  }
+}
+
+
+resource "aws_iam_user_group_membership" "<%= user_name %>" {
+  user = "${aws_iam_user.<%= user_name %>.name}"
+
+  groups = [
+    <%- data['groups'].each do |group_name| %>
+    "${aws_iam_group.group-<%= group_name %>.name}",
+    <%- end -%>
+  ]
+}
+
+<%- end -%>

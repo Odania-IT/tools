@@ -1,0 +1,7 @@
+<%- variables.each_pair do |key, val| -%>
+variable "<%= key %>" {
+  type = "<%= determine_variable_type(val) %>"
+  default = "<%= val %>"
+}
+
+<%- end -%>

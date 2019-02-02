@@ -1,0 +1,94 @@
+# This file is used to create the S3 bucket which holds the different terraform state files
+
+#############################
+# S3 bucket
+#############################
+resource "aws_s3_bucket" "terraform_state" {
+  count = "${var.intialize_terraform == "true" ? 1 : 0}"
+  bucket = "${var.state_bucket_name}"
+  policy = "${data.aws_iam_policy_document.artifacts_enforce_encryption.json}"
+
+  versioning {
+    enabled = true
+  }
+
+  server_side_encryption_configuration {
+    "rule" {
+      "apply_server_side_encryption_by_default" {
+        sse_algorithm = "aws:kms"
+        kms_master_key_id = "aws/s3"
+      }
+    }
+  }
+
+  provider = "aws.infrastructure"
+}
+
+data "aws_iam_policy_document" "artifacts_enforce_encryption" {
+  count = "${var.intialize_terraform == "true" ? 1 : 0}"
+  statement {
+    effect = "Deny"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.state_bucket_name}/*"]
+    principals {
+      identifiers = [
+        "*"
+      ]
+      type = "*"
+    }
+    condition {
+      test = "Null"
+      values = [
+        "true"
+      ]
+      variable = "s3:x-amz-server-side-encryption"
+    }
+  }
+  statement {
+    effect = "Deny"
+    actions = [
+      "s3:PutObject"]
+    resources = [
+      "arn:aws:s3:::${var.state_bucket_name}/*"]
+    principals {
+      identifiers = [
+        "*"
+      ]
+      type = "*"
+    }
+    condition {
+      test = "StringNotEquals"
+      values = [
+        "aws:kms"
+      ]
+      variable = "s3:x-amz-server-side-encryption"
+    }
+  }
+
+  provider = "aws.infrastructure"
+}
+
+resource "aws_dynamodb_table" "terraform_state_lock" {
+  count = "${var.intialize_terraform == "true" ? 1 : 0}"
+  name = "${var.state_dynamo_table}"
+  read_capacity = 1
+  write_capacity = 1
+  hash_key = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  tags = {
+    Name = "Terraform State Lock"
+    Environment = "global"
+    App = "terraform"
+    Team = "global"
+  }
+
+  provider = "aws.infrastructure"
+}
