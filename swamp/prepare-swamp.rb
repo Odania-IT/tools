@@ -26,6 +26,7 @@ if config['write_files']
 end
 
 result = ''
+switch_roles_config = ''
 profile_data.each do |group_name, group|
   extra = ''
   if group['extra_script']
@@ -37,6 +38,9 @@ profile_data.each do |group_name, group|
     extra << " && source #{script_file}"
   end
 
+  switch_roles_config << "[#{group_name}]\n"
+  switch_roles_config << "aws_account_id = #{group['switch_role_account']}\n\n"
+
   result << "# Swamp for #{group_name}\n"
   group['roles'].each do |role|
     target_role = group['target_role']
@@ -47,6 +51,11 @@ profile_data.each do |group_name, group|
     swamp_cmd << "&& export AWS_PROFILE=#{role['target_profile']} && export AWS_REGION=#{group['region']} #{extra}"
 
     result << "alias swamp-#{role['target_profile']}=\"#{swamp_cmd}\"\n"
+
+    switch_roles_config << "[#{role['target_profile']}]\n"
+    switch_roles_config << "source_profile = #{group_name}\n"
+    switch_roles_config << "color = #{role['color']}\n" unless role['color'].nil?
+    switch_roles_config << "role_arn = arn:aws:iam::#{role['account']}:role/#{target_role}\n\n"
 
     if config['write_files']
       script_dir = File.join(swamp_script_dir, "#{role['target_profile']}.sh")
@@ -81,6 +90,14 @@ end
 puts 'Copying file'
 FileUtils.mkdir_p File.dirname(bash_aliases_file)
 FileUtils.cp tmp_aliases_file, bash_aliases_file
+
+# Write firefox extended switch role config
+if config['switch_roles_config']
+  puts "Writing Switch Role Config to: #{config['switch_roles_config']}"
+  switch_roles_dir = File.dirname config['switch_roles_config']
+  FileUtils.mkdir_p switch_roles_dir unless File.directory? switch_roles_dir
+  File.write config['switch_roles_config'], switch_roles_config
+end
 
 puts
 puts 'Setup:'

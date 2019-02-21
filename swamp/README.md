@@ -1,3 +1,11 @@
+# Deprecation Warning
+
+The swamp tool now directly integrates most of the functionality. Some missing parts currently in a pr.
+
+You can look it up here:
+[https://github.com/Odania-IT/swamp](https://github.com/Odania-IT/swamp)
+
+
 # Prepare swamp setup
 
 Swamp helps to switch between different AWS accounts. The helper creates bash aliases that make it easy to configure.
@@ -70,3 +78,4 @@ You need to add something like this to your .bashrc in your home folder:
 The swamp tool needs to be installed. You can find releases here:
 
 [https://github.com/felixb/swamp](https://github.com/felixb/swamp)
+[https://github.com/Odania-IT/swamp](https://github.com/Odania-IT/swamp)
