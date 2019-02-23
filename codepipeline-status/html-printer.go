@@ -21,7 +21,7 @@ func renderPipeline(pipeline *PipelineState, buffer *bytes.Buffer) {
 	_ = tmpl.Execute(buffer, pipeline)
 }
 
-func generateHtmlState(config *PipelineStatusConfig, pipelines []*PipelineState, startDate string) string {
+func generateHtmlState(config PipelineStatusConfig, pipelines []*PipelineState, startDate string) string {
 	fmt.Println("Writing HTML State to", config.TargetPath)
 	_ = os.MkdirAll(config.TargetPath, os.ModePerm)
 

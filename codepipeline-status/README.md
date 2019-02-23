@@ -6,6 +6,6 @@ The result can be uploaded to s3.
 
 ## TODO
 
-* Load yaml config to override default values
 * Automatic reload in intervals
 * Deploy Helper (Terraform?)
+* Tests

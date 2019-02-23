@@ -72,7 +72,8 @@ func codePipelineState(sess *session.Session, pipelines []*PipelineState, timeFo
 
 func main() {
 	startDate := time.Now()
-	config := newPipelineStatusConfig()
+	arguments := parseArguments()
+	config := newPipelineStatusConfig(arguments.config)
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(config.Region)})
 

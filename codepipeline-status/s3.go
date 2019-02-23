@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func AddToS3(sess *session.Session, htmlStateFile string, config *PipelineStatusConfig) error {
+func AddToS3(sess *session.Session, htmlStateFile string, config PipelineStatusConfig) error {
 
 	// Open the file for use
 	file, err := os.Open(htmlStateFile)
