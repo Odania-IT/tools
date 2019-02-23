@@ -1,8 +1,0 @@
----
-Region: eu-central-1
-TimeFormat: 15:04
-TargetPath: /tmp/pipeline-status.html
-Html:
-  PageTitle: Custom Page Title
-BucketName: my-bucket-name
-BucketKey: pipeline-status/index.html
