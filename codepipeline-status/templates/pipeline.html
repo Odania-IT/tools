@@ -1,0 +1,11 @@
+<div class="col border border-primary pipeline-col">
+	<h5>{{.Name}}</h5>
+
+	<ul style="list-style: none">
+		{{range .Stages}}
+			<li class="alert alert-{{.HtmlState}}">
+				{{.Name}} <span class="badge badge-light">{{.LastChanged}}</span> <i class="badge badge-{{.HtmlState}}">{{.State}}</i>
+			</li>
+		{{end}}
+	</ul>
+</div>
