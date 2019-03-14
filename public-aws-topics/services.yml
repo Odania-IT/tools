@@ -1,0 +1,4 @@
+---
+services:
+  AwsSolutionsUpdateFeed: 'arn:aws:sns:us-east-1:706690023584:aws-solutions-update-feed-topic'
+  AmazonIpSpaceChanged: 'arn:aws:sns:us-east-1:806199016981:AmazonIpSpaceChanged'
